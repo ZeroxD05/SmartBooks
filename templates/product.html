@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block title %}{{ product.name }} - SmartBooks{%
+endblock %} {% block content %}
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <img
+      src="{{ url_for('static', filename='images/grafik.png') }}"
+      alt="{{ product.name }}"
+      class="img-fluid rounded"
+      onerror="this.src='https://via.placeholder.com/600x400?text={{ product.name }}'"
+    />
+  </div>
+  <div class="col-md-6">
+    <h1>{{ product.name }}</h1>
+    <p class="lead">{{ product.description }}</p>
+
+    <form action="{{ url_for('add_to_cart') }}" method="post">
+      <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+      <div class="mb-3">
+        <label for="size" class="form-label">Size:</label>
+        <select class="form-select" id="size" name="size" required>
+          {% for size in product.sizes %}
+          <option value="{{ size }}">
+            {{ size }} - ${{ "%.2f"|format(product.get_price_for_size(size)) }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="color" class="form-label">Color:</label>
+        <select class="form-select" id="color" name="color" required>
+          {% for color in product.colors %}
+          <option value="{{ color }}">{{ color }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="quantity"
+          name="quantity"
+          min="1"
+          value="1"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+    </form>
+
+    <div class="mt-4">
+      <h4>Product Details:</h4>
+      <ul>
+        <li>Custom self-published book</li>
+        <li>Multiple size options available</li>
+        <li>Choice of different colors</li>
+        <li>High-quality printing and binding</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
